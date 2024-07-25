@@ -289,7 +289,7 @@ static void ep1_out_handler(void)
 	if (ep1_in_cnt)
 	{
 		USBD_PMA_SET_TX_COUNT(EP1, MIN(ep1_in_cnt, USBD_FS_MAX_PACKET_SIZE));
-		usbd_pma_write(ep1_in_buffer, ADDR1_TX, MIN(ep1_in_cnt, USBD_FS_MAX_PACKET_SIZE));
+		usbd_pma_write(ADDR1_TX, ep1_in_buffer, MIN(ep1_in_cnt, USBD_FS_MAX_PACKET_SIZE));
 		USBD_EP_SET_STAT_TX(EP1, USB_EP_STAT_TX_VALID);
 	}
 }
