@@ -1,0 +1,6 @@
+[submodule "CMSIS-DAP"]
+	path = CMSIS-DAP
+	url = https://github.com/ARM-software/CMSIS-DAP
+[submodule "STM32L4xx_USB_Device"]
+	path = STM32L4xx_USB_Device
+	url = https://github.com/JamesBara/STM32L4xx_USB_Device
