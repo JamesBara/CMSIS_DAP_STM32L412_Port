@@ -80,5 +80,5 @@ add_custom_command(TARGET ${PROJECT_NAME}
         VERBATIM
         #COMMAND ${CMAKE_OBJCOPY} -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
         #COMMAND ${CMAKE_SIZE} ${PROJECT_NAME}.elf
-        COMMAND ${CMAKE_OBJDUMP} -h ${PROJECT_NAME}.elf
+        #COMMAND ${CMAKE_OBJDUMP} -h ${PROJECT_NAME}.elf
         )

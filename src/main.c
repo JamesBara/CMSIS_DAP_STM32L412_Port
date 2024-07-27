@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
-#include <string.h>
 #include "ms_os_20_request.h"
 #include "usbd_request.h"
 #include "usbd_core.h"
@@ -252,7 +251,6 @@ static usbd_core_config_type usbd_config =
 	NULL,
 	NULL
 };
-
 
 int main(void)
 {

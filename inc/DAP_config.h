@@ -49,6 +49,7 @@ This information includes:
 #include CMSIS_device_header
 #else
 #include "stm32l4xx.h"                             // Debug Unit Cortex-M Processor Header File
+#include "spinlock_stm32l4xx.h"
 #endif
 
 /// Processor Clock of the Cortex-M MCU used in the Debug Unit.
@@ -82,7 +83,7 @@ This information includes:
 /// Default communication speed on the Debug Access Port for SWD and JTAG mode.
 /// Used to initialize the default SWD/JTAG clock frequency.
 /// The command \ref DAP_SWJ_Clock can be used to overwrite this default setting.
-#define DAP_DEFAULT_SWJ_CLOCK   1000000U        ///< Default SWD/JTAG clock frequency in Hz.
+#define DAP_DEFAULT_SWJ_CLOCK   500000U        ///< Default SWD/JTAG clock frequency in Hz.
 
 /// Maximum Package Size for Command and Response data.
 /// This configuration settings is used to optimize the communication performance with the
@@ -117,7 +118,7 @@ This information includes:
 #define SWO_STREAM              0               ///< SWO Streaming Trace: 1 = available, 0 = not available.
 
 /// Clock frequency of the Test Domain Timer. Timer value is returned with \ref TIMESTAMP_GET.
-#define TIMESTAMP_CLOCK         100000000U      ///< Timestamp clock in Hz (0 = timestamps not supported).// 
+#define TIMESTAMP_CLOCK         0U      ///< Timestamp clock in Hz (0 = timestamps not supported).// 
 
 /// Indicate that UART Communication Port is available.
 /// This information is returned by the command \ref DAP_Info as part of <b>Capabilities</b>.
@@ -326,7 +327,7 @@ __STATIC_INLINE void PORT_SWD_SETUP (void) {
     SET(GPIOA->OSPEEDR, (GPIO_OSPEEDR_OSPEED0_VERY_HIGH | GPIO_OSPEEDR_OSPEED1_VERY_HIGH | GPIO_OSPEEDR_OSPEED2_VERY_HIGH));
     SET(GPIOA->OTYPER, GPIO_OTYPER_OT0); /*!< Set Open Drain.*/
     SET(GPIOA->PUPDR, GPIO_PUPDR_PUPD0_PULL_UP); /*!< Set Pull-Up.*/
-    SET(GPIOA->ODR, (GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2));
+    GPIOA->BSRR = (GPIO_BSRR_BS0 | GPIO_BSRR_BS1 | GPIO_BSRR_BS2);
 }
 
 /** Disable JTAG/SWD I/O Pins.
@@ -348,7 +349,7 @@ __STATIC_INLINE void PORT_OFF (void) {
 \return Current status of the SWCLK/TCK DAP hardware I/O pin.
 */
 __STATIC_FORCEINLINE uint32_t PIN_SWCLK_TCK_IN  (void) {
-  return (uint32_t)GET_BIT(GPIOA->ODR, GPIO_ODR_OD1);
+    return GET_BIT(GPIOA->ODR, GPIO_ODR_OD1);
 }
 
 /** SWCLK/TCK I/O pin: Set Output to High.
@@ -371,7 +372,7 @@ __STATIC_FORCEINLINE void     PIN_SWCLK_TCK_CLR (void) {
 \return Current status of the SWDIO/TMS DAP hardware I/O pin.
 */
 __STATIC_FORCEINLINE uint32_t PIN_SWDIO_TMS_IN  (void) {
-  return (uint32_t)GET_BIT(GPIOA->IDR, GPIO_IDR_ID2);
+    return GET_BIT(GPIOA->IDR, GPIO_IDR_ID2);
 }
 
 /** SWDIO/TMS I/O pin: Set Output to High.
@@ -392,14 +393,14 @@ __STATIC_FORCEINLINE void     PIN_SWDIO_TMS_CLR (void) {
 \return Current status of the SWDIO DAP hardware I/O pin.
 */
 __STATIC_FORCEINLINE uint32_t PIN_SWDIO_IN      (void) {
-  return (uint32_t)GET_BIT(GPIOA->IDR, GPIO_IDR_ID2);
+    return GET_BIT(GPIOA->IDR, GPIO_IDR_ID2);
 }
 
 /** SWDIO I/O pin: Set Output (used in SWD mode only).
 \param bit Output value for the SWDIO DAP hardware I/O pin.
 */
 __STATIC_FORCEINLINE void     PIN_SWDIO_OUT     (uint32_t bit) {
-    GPIOA->BSRR = (bit ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2);
+    GPIOA->BSRR = (bit & 0x1U) ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2;
 }
 
 /** SWDIO I/O pin: Switch to Output mode (used in SWD mode only).
@@ -408,9 +409,6 @@ called prior \ref PIN_SWDIO_OUT function calls.
 */
 __STATIC_FORCEINLINE void     PIN_SWDIO_OUT_ENABLE  (void) {
     SET(GPIOA->MODER, GPIO_MODER_MODE2_OUTPUT);
-    //SET(GPIOA->OSPEEDR, GPIO_OSPEEDR_OSPEED2_VERY_HIGH);
-    GPIOA->BSRR = GPIO_BSRR_BS2;
-   // GPIOA->BRR = GPIO_BRR_BR2;
 }
 
 /** SWDIO I/O pin: Switch to Input mode (used in SWD mode only).
@@ -419,9 +417,6 @@ called prior \ref PIN_SWDIO_IN function calls.
 */
 __STATIC_FORCEINLINE void     PIN_SWDIO_OUT_DISABLE (void) {
     CLEAR(GPIOA->MODER, GPIO_MODER_MODE2);
-    //CLEAR(GPIOA->OSPEEDR, GPIO_OSPEEDR_OSPEED2);
-    GPIOA->BRR = GPIO_BRR_BR2;
-    //GPIOA->BSRR = GPIO_BSRR_BS2;
 }
 
 
@@ -476,7 +471,7 @@ __STATIC_FORCEINLINE void     PIN_nTRST_OUT  (uint32_t bit) {
 \return Current status of the nRESET DAP hardware I/O pin.
 */
 __STATIC_FORCEINLINE uint32_t PIN_nRESET_IN  (void) {
-  return (uint32_t)GET_BIT(GPIOA->IDR, GPIO_IDR_ID0);
+    return GET_BIT(GPIOA->IDR, GPIO_IDR_ID0);
 }
 
 /** nRESET I/O pin: Set Output.
@@ -485,7 +480,7 @@ __STATIC_FORCEINLINE uint32_t PIN_nRESET_IN  (void) {
            - 1: release device hardware reset.
 */
 __STATIC_FORCEINLINE void     PIN_nRESET_OUT (uint32_t bit) {
-    GPIOA->BSRR = bit ? GPIO_BSRR_BS0 : GPIO_BSRR_BR0;
+    GPIOA->BSRR = (bit & 0x1U) ? GPIO_BSRR_BS0 : GPIO_BSRR_BR0;
 }
 
 ///@}
@@ -563,7 +558,7 @@ Status LEDs. In detail the operation of Hardware I/O and LED pins are enabled an
 __STATIC_INLINE void DAP_SETUP (void) {
     /*Enable GPIOA clock.*/
     SET(RCC->AHB2ENR, RCC_AHB2ENR_GPIOAEN);
-    while (!GET(RCC->AHB2ENR, RCC_AHB2ENR_GPIOAEN));
+    __spinlock(2);
     PORT_SWD_SETUP();
 
 }

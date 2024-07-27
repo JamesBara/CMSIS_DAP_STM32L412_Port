@@ -28,7 +28,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -fdata-sections -ff
 
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -ggdb3")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ggdb3")
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -ggdb0 -DNDEBUG")
 elseif(CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
