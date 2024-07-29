@@ -46,7 +46,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     CMSIS-DAP/Firmware/Source/SW_DP.c
     src/bsp.c
     src/main.c
-  )
+    )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
