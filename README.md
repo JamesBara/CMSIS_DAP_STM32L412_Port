@@ -1,11 +1,20 @@
 ﻿# Port of CMSIS-DAP for STM32L412.
 
-CMSIS-DAP has been stripped down to only 2 pin Serial Wire Debugging and the nReset pin.
-The bare minimum Microsoft OS 2.0 descriptor has been added to provide PnP capabilities on Windows 8.1 and above.
+This project is a port of CMSIS-DAP for STM32L412 and depends on [STM32L4xx_USB_Device](https://github.com/JamesBara/STM32L4xx_USB_Device), [STM32L4xx](https://github.com/JamesBara/STM32L4xx), [CMSIS-DAP](https://github.com/ARM-software/CMSIS-DAP) and [CMSIS6](https://github.com/ARM-software/CMSIS_6). The bare minimum Microsoft OS 2.0 descriptor has been added to provide PnP capabilities on Windows 8.1 and above, so it should work without need for drivers.
 
-The project enumerates properly on Windows 11. It should work with OpenOCD and arm-none-eabi-gdb.
+# Tested and working functionality:
 
-This project depends on [STM32L4xx_USB_Device](https://github.com/JamesBara/STM32L4xx_USB_Device), [STM32L4xx](https://github.com/JamesBara/STM32L4xx), [CMSIS-DAP](https://github.com/ARM-software/CMSIS-DAP) and [CMSIS6](https://github.com/ARM-software/CMSIS_6).
+2 wire SWDIO (SWCLK and SWDIO) has been tested on Windows 11 with OpenOCD and arm-none-eabi-gdb and it's working properly. 
+
+# Untested functionality:
+
+Hardware reset, LEDs, and JTAG have been added but are untested.
+
+# Functionality that isn't (and won't be) implemented:
+
+SWO over UART (Stream and/or Manchester) and USB to UART. 
+The above functionality won't be implemented since it requires either to use the provided drivers from CMSIS and an RTOS, or to heavily modify the provided CMSIS-DAP, in order to fit the current implementation.
+
 
 File tree:
 ```

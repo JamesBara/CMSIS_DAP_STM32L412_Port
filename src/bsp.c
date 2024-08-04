@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "assert_stm32l4xx.h"
+#include "spinlock_stm32l4xx.h"
 #include "stm32l4xx.h"
 #include "bsp.h"
 
@@ -97,10 +98,10 @@ void bsp_init(void)
 {
 	/*Enable Syscfg clock*/
 	SET(RCC->APB2ENR, RCC_APB2ENR_SYSCFGEN);
-	while (!GET(RCC->APB2ENR, RCC_APB2ENR_SYSCFGEN));
+	__spinlock(2);
 	/*Enable pwr clock*/
 	SET(RCC->APB1ENR1, RCC_APB1ENR1_PWREN);
-	while (!GET(RCC->APB1ENR1, RCC_APB1ENR1_PWREN));
+	__spinlock(2);
 	/*Configure the systick*/
 	tick = 0;
 	SysTick_Config(SystemCoreClock / 1000);
@@ -113,7 +114,7 @@ void bsp_init(void)
 	SET(FLASH->ACR, FLASH_ACR_PRFTEN);
 	/*Enable gpioa clock.*/
 	SET(RCC->AHB2ENR, RCC_AHB2ENR_GPIOAEN);
-	while (!GET(RCC->AHB2ENR, RCC_AHB2ENR_GPIOAEN));
+	__spinlock(2);
 	/*Clear PA11 and PA12.*/
 	CLEAR(GPIOA->MODER, (GPIO_MODER_MODE11 | GPIO_MODER_MODE12));
 	CLEAR(GPIOA->OTYPER, (GPIO_OTYPER_OT11 | GPIO_OTYPER_OT12));
@@ -128,7 +129,7 @@ void bsp_init(void)
 	set_usbd_clk_src_hsi48();
 	/*Enable the usb clock.*/
 	SET(RCC->APB1ENR1, RCC_APB1ENR1_USBFSEN);
-	while (!GET(RCC->APB1ENR1, RCC_APB1ENR1_USBFSEN));
+	__spinlock(2);
 	/*Turn on the usb power supply.*/
 	SET(PWR->CR2, PWR_CR2_USV);
 	/*Set usb interrupt priority to the lowest.*/

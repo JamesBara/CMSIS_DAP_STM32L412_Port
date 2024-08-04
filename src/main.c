@@ -22,7 +22,7 @@
 	#define COUNT1_RX USBD_FS_MAX_PACKET_SIZE
 #endif
 
-/************************************************
+ /************************************************
  * @brief USBD Descriptors.
  ***********************************************/
 
@@ -121,7 +121,7 @@ static const struct usbd_configuration_descriptor usbd_conf_desc =
 			USBD_FS_MAX_PACKET_SIZE,
 			0x0U
 		}
-	}
+		}
 };
 
 static const struct usbd_string_descriptor_zero_type usbd_str0_desc =

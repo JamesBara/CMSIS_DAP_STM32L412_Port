@@ -44,9 +44,10 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     CMSIS-DAP/Firmware/Source/DAP.c
     CMSIS-DAP/Firmware/Source/DAP_vendor.c
     CMSIS-DAP/Firmware/Source/SW_DP.c
+    CMSIS-DAP/Firmware/Source/JTAG_DP.c
     src/bsp.c
     src/main.c
-    )
+)
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
@@ -67,7 +68,6 @@ target_compile_definitions(STM32L4xx_USB_Device INTERFACE
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
      $<$<CONFIG:Debug>:DEBUG>
 )
-
 
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
