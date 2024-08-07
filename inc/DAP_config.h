@@ -52,6 +52,7 @@ This information includes:
 #include "spinlock_stm32l4xx.h"
 #include "DAP_user_defines.h"
 #include "bsp.h"
+#include "usbd_desc.h"
 #endif
 
 /// Processor Clock of the Cortex-M MCU used in the Debug Unit.
@@ -91,7 +92,7 @@ This information includes:
 /// This configuration settings is used to optimize the communication performance with the
 /// debugger and depends on the USB peripheral. Typical vales are 64 for Full-speed USB HID or WinUSB,
 /// 1024 for High-speed USB HID and 512 for High-speed USB WinUSB.
-#define DAP_PACKET_SIZE         64U            ///< Specifies Packet Size in bytes.
+#define DAP_PACKET_SIZE         USBD_FS_MAX_PACKET_SIZE            ///< Specifies Packet Size in bytes.
 
 /// Maximum Package Buffers for Command and Response data.
 /// This configuration settings is used to optimize the communication performance with the

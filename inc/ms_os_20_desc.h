@@ -1,8 +1,8 @@
-#ifndef MS_OS_20_REQUEST_H
-#define MS_OS_20_REQUEST_H
+#ifndef MS_OS_20_DESC_H
+#define MS_OS_20_DESC_H
 
 #include <stdint.h>
-#include "stm32l4xx.h"
+#include "cmsis_gcc.h"
 
 #define MS_OS_20_PLATFORM 0x5
 
@@ -29,31 +29,31 @@
  * Microsoft OS 2.0 Descriptor Set Information 
  ***********************************************/
 /*CapabilityData of the MS OS 2.0 descriptor.*/
-typedef struct
+struct __PACKED usbd_ms_os20_set_information_descriptor_type
 {
     uint32_t dwWindowsVersion;
     uint16_t wMSOSDescriptorSetTotalLength;
     uint8_t bMS_VendorCode;
     uint8_t bAltEnumCode;
-}__PACKED usbd_ms_os20_set_information_descriptor_type;
+};
 
-typedef struct
+struct __PACKED usbd_ms_os20_set_header_type
 {
 	uint16_t wLength;
 	uint16_t wDescriptorType;
 	uint32_t dwWindowsVersion;
 	uint16_t wTotalLength;
-}__PACKED usbd_ms_os20_set_header_type;
+};
 
-typedef struct
+struct __PACKED usbd_ms_os20_compatible_id_feature_type
 {
 	uint16_t wLength;
 	uint16_t wDescriptorType;
 	uint8_t CompatibleID[8];
 	uint8_t SubCompatibleID[8];
-}__PACKED usbd_ms_os20_compatible_id_feature_type;
+};
 
-typedef struct
+struct __PACKED usbd_ms_os20_registry_property_feature_type
 {
 	uint16_t wLength;
 	uint16_t wDescriptorType;
@@ -62,8 +62,8 @@ typedef struct
 	uint8_t PropertyName[40];
 	uint16_t wPropertyDataLength;
 	uint8_t PropertyData[78];
-}__PACKED usbd_ms_os20_registry_property_feature_type;
+};
 
 
 
-#endif /*MS_OS_20_REQUEST_H*/
+#endif /*MS_OS_20_DESC_H*/

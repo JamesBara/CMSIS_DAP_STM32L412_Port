@@ -47,7 +47,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     CMSIS-DAP/Firmware/Source/JTAG_DP.c
     src/bsp.c
     src/main.c
-)
+    src/usbd_dap_desc.c
+ "src/usbd_dap.c" "inc/usbd_dap.h")
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE

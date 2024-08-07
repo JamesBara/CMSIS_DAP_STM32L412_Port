@@ -25,12 +25,16 @@ STM32L412_CMSIS_DAP
 │            └───CMSIS_6
 ├───inc
 │    ├───bsp.h
-│    ├───DAP_user_defines.h
 │    ├───DAP_config.h
-│    └───ms_os_20_request.h
+│    ├───DAP_user_defines.h
+│    ├───ms_os_20_request.h
+│    ├───usbd_dap.h
+│    └───usbd_dap_desc.h
 ├───src
 │    ├───bsp.c
-│    └───main.c
+│    ├───main.c
+│    ├───usbd_dap.c
+│    └───usbd_dap_desc.c
 ├───STM32L412.ld
 ├───CMakeLists.txt
 ├───CMakePresets.json
